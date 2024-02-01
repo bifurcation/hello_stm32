@@ -1,27 +1,27 @@
 #![no_main]
 #![no_std]
 
-use cortex_m_rt::entry;
-use panic_halt as _;
+use embassy_executor::Spawner;
+use embassy_stm32::gpio::{Level, Output, Speed};
+use embassy_stm32::peripherals::PC0;
+use embassy_time::{Duration, Ticker};
+use panic_probe as _;
 
-use stm32f4xx_hal::{delay::Delay, pac, prelude::*};
+mod mls;
 
-#[entry]
-fn main() -> ! {
-    let device = pac::Peripherals::take().unwrap();
-    let core = cortex_m::Peripherals::take().unwrap();
+#[embassy_executor::main]
+async fn main(spawner: Spawner) {
+    let p = embassy_stm32::init(Default::default());
+    let led = Output::new(p.PC0, Level::Low, Speed::Medium);
 
-    let rcc = device.RCC.constrain();
-    let clocks = rcc.cfgr.sysclk(84.mhz()).freeze();
-    let _ = device.SYSCFG.constrain();
+    spawner.spawn(blinky(led)).unwrap();
+}
 
-    let gpioc = device.GPIOC.split();
-
-    let mut led = gpioc.pc0.into_push_pull_output();
-    let mut delay = Delay::new(core.SYST, &clocks);
-
+#[embassy_executor::task]
+async fn blinky(mut led: Output<'static, PC0>) -> ! {
+    let mut ticker = Ticker::every(Duration::from_millis(200));
     loop {
         led.toggle();
-        delay.delay_ms(200u8);
+        ticker.next().await;
     }
 }
