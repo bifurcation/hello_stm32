@@ -8,12 +8,9 @@ opt-level = "z"
 
 [dependencies]
 
-mls-rs = { version = "0.38.0", default-features = false }
-mls-rs-crypto-rustcrypto = { version = "0.9.0", default-features = false }
-getrandom = "0.2.12"
-emballoc = "0.2.0"
 rand = { version = "0.8.5", default-features = false }
 stm32f4xx-hal = { version = "0.20.0", features = ["stm32f405"] }
 panic-halt = "0.2.0"
 cortex-m = "0.7.7"
 cortex-m-rt = "0.7.3"
+emballoc = "0.2.0"
