@@ -3,14 +3,17 @@ name = "hello_stm32"
 version = "0.1.0"
 edition = "2021"
 
+[profile.release]
+opt-level = "z"
+
 [dependencies]
-#mls-rs = { version = "0.38.0", default-features = false }
-#mls-rs-crypto-rustcrypto = { version = "0.9.0", default-features = false }
-cortex-m = { version = "0.7.7", features = ["critical-section-single-core"] }
-cortex-m-rt = "0.6"
-embassy-executor = { version = "0.5.0", features = ["arch-cortex-m", "executor-thread", "integrated-timers"] }
-embassy-stm32 = { version = "0.1.0", features = ["stm32f405oe", "time-driver-any"] }
-embassy-time = { version = "0.3.0" }
-embedded-alloc = "0.5.1"
+
+mls-rs = { version = "0.38.0", default-features = false }
+mls-rs-crypto-rustcrypto = { version = "0.9.0", default-features = false }
+getrandom = "0.2.12"
+emballoc = "0.2.0"
+rand = { version = "0.8.5", default-features = false }
+stm32f4xx-hal = { version = "0.20.0", features = ["stm32f405"] }
 panic-halt = "0.2.0"
-panic-probe = { version = "0.3" }
+cortex-m = "0.7.7"
+cortex-m-rt = "0.7.3"
